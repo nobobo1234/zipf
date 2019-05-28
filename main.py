@@ -1,5 +1,4 @@
 import re
-import matplotlib as mpl
 import matplotlib.pyplot as plt
 from scipy.optimize import minimize
 import numpy as np
@@ -28,26 +27,20 @@ sorted_words = [word[0] for word in words.most_common()]
 sorted_freq = [word[1] for word in words.most_common()]
 ranks = list(range(1, len(sorted_words)+1))
 
+
 def loglik(b):  
     # Power law function
     rank_vector = np.array(ranks)**(-b)
 
     # Normalized
-    rank_vector = rank_vector/rank_vector.sum()
+    norm_rank_vector = rank_vector/rank_vector.sum()
+    freq_rank_vector = np.log(norm_rank_vector) * np.array(sorted_freq)
 
-    # Log Likelihoood
-    vector = np.log(rank_vector)
+    sum = freq_rank_vector.sum()
+    return -sum
 
-    # Multiply the vector by frequencies
-    vector = np.log(rank_vector) * np.array(sorted_freq)
 
-    # LL is the sum
-    L = vector.sum()
-
-    # We want to maximize LogLikelihood or minimize (-1)*LogLikelihood
-    return(-L)
-
-s_best = minimize(loglik, [1])
+s_best = minimize(loglik, np.array([2]))
 
 print(f"Best slope is: {s_best.x[0]}")
 
@@ -69,8 +62,10 @@ plt.legend()
 plt.show()
 plt.savefig('plot.png')
 
+
 def zipf_freq(rank, slope, most_freq_word):
     return math.floor(most_freq_word * math.pow(rank, slope))
+
 
 rank = int(input("Input a rank: "))
 print(f"You chose the word {sorted_words[rank-1]} with frequency {sorted_freq[rank-1]}")

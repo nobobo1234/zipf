@@ -1,0 +1,5 @@
+venv/
+text.txt
+results.json
+plot.png
+.idea/
