@@ -5,6 +5,7 @@ import numpy as np
 import math
 from collections import Counter
 import json
+import matplotlib2tikz
 
 words = Counter()
 
@@ -61,6 +62,7 @@ plt.legend()
 
 plt.show()
 plt.savefig('plot.png')
+matplotlib2tikz.save('plot.tex')
 
 
 def zipf_freq(rank, slope, most_freq_word):
